@@ -158,55 +158,117 @@ class Blue36Controller extends Controller
         }
 	}
 	
-	public function blue36_bet_history(Request $request)
-	{
-		$validator = Validator::make($request->all(), [
+// 	public function blue36_bet_history(Request $request)
+// 	{
+// 		$validator = Validator::make($request->all(), [
+//         'user_id' => 'required',
+// 	    'limit' => 'required'
+//     ]);
+
+//     $validator->stopOnFirstFailure();
+
+//     if ($validator->fails()) {
+//         return response()->json(['success' => false, 'message' => $validator->errors()->first()],200);
+//     }
+// 		    $userid = $request->user_id;
+// 		$limit = $request->limit;
+//      $offset = $request->offset ?? 0;
+		
+// 		$where = [];
+
+//     if (!empty($userid)) {
+//         $where[] = "blue_36_bets.user_id = '$userid'";
+        
+//     }
+//     //$query = "SELECT `game_id`, `win_amount`, `win_number`, `amount`, `games_no` FROM `blue_36_bets` ";
+//     $query = "SELECT `id`,`games_no`,`win_number`,`game_id`, SUM(`amount`) AS amount, SUM(`win_amount`) AS win_amount FROM `blue_36_bets` GROUP BY `games_no`;";
+
+//     if (!empty($where)) {
+//         $query .= " WHERE " . implode(" AND ", $where);
+//     }
+
+//     $query .= " ORDER BY blue_36_bets.games_no DESC LIMIT $offset,$limit";
+
+//     $bet_history = DB::select($query);
+//      //dd($bet_history);
+// 	//$bet_history=DB::select("SELECT g.games_no AS games_no, g.number AS number, COALESCE(b.game_id, '') AS game_id, COALESCE(b.amount, '') AS amount,COALESCE(b.win_amount, '') AS win_amount FROM green_36_results g LEFT JOIN bets b ON g.games_no = b.games_no AND b.user_id = 1 ORDER BY g.games_no DESC LIMIT 10");
+// 		$result_count=DB::select("SELECT COUNT(`id`) as id FROM `blue_36_bets` where user_id=$userid");
+// 		$total_count=$result_count[0]->id;
+// 		 if ($bet_history) {
+//             $response = [
+//                 'message' => 'data found',
+//               'success' => true,
+// 				'result_count'=>$total_count,
+//                 'data' => $bet_history
+//             ];
+
+//             return response()->json($response);
+//         } else {
+//             return response()->json(['message' => 'No record found', 'success' => false,
+//                 'data' => []], 200);
+//         }
+// 	}
+
+public function blue36_bet_history(Request $request)
+{
+    $validator = Validator::make($request->all(), [
         'user_id' => 'required',
-	    'limit' => 'required'
+        'limit' => 'required'
     ]);
 
     $validator->stopOnFirstFailure();
 
     if ($validator->fails()) {
-        return response()->json(['success' => false, 'message' => $validator->errors()->first()],200);
+        return response()->json(['success' => false, 'message' => $validator->errors()->first()], 200);
     }
-		    $userid = $request->user_id;
-		$limit = $request->limit;
-     $offset = $request->offset ?? 0;
-		
-		$where = [];
+
+    $userid = $request->user_id;
+    $limit = $request->limit;
+    $offset = $request->offset ?? 0;
+
+    $where = [];
 
     if (!empty($userid)) {
         $where[] = "blue_36_bets.user_id = '$userid'";
-        
-    }
-    $query = "SELECT `id`, `game_id`, `win_amount`, `win_number`, `amount`, `games_no`, `created_at` FROM `blue_36_bets` ";
-
-    if (!empty($where)) {
-        $query .= " WHERE " . implode(" AND ", $where);
     }
 
-    $query .= " ORDER BY blue_36_bets.games_no DESC LIMIT $offset,$limit";
+   $query = "SELECT `games_no`, MAX(`win_number`) AS win_number, MAX(`game_id`) AS game_id, 
+          SUM(`amount`) AS amount, SUM(`win_amount`) AS win_amount 
+          FROM `blue_36_bets`";
 
+// Apply WHERE conditions if there are any
+if (!empty($where)) {
+    $query .= " WHERE " . implode(" AND ", $where);
+}
+
+// Group the results by games_no
+$query .= " GROUP BY `blue_36_bets`.`games_no`";
+
+// Order and apply LIMIT and OFFSET
+$query .= " ORDER BY `blue_36_bets`.`games_no` DESC LIMIT $offset, $limit";
+
+    // Execute the query
     $bet_history = DB::select($query);
-     //dd($bet_history);
-	//$bet_history=DB::select("SELECT g.games_no AS games_no, g.number AS number, COALESCE(b.game_id, '') AS game_id, COALESCE(b.amount, '') AS amount,COALESCE(b.win_amount, '') AS win_amount FROM green_36_results g LEFT JOIN bets b ON g.games_no = b.games_no AND b.user_id = 1 ORDER BY g.games_no DESC LIMIT 10");
-		$result_count=DB::select("SELECT COUNT(`id`) as id FROM `blue_36_bets` where user_id=$userid");
-		$total_count=$result_count[0]->id;
-		 if ($bet_history) {
-            $response = [
-                'message' => 'data found',
-               'success' => true,
-				'result_count'=>$total_count,
-                'data' => $bet_history
-            ];
+    //dd($bet_history);
 
-            return response()->json($response);
-        } else {
-            return response()->json(['message' => 'No record found', 'success' => false,
-                'data' => []], 200);
-        }
-	}
+    // Get the total count of records for pagination
+    $result_count = DB::select("SELECT COUNT(`id`) as id FROM `blue_36_bets` WHERE user_id = $userid");
+    $total_count = $result_count[0]->id;
+
+    if ($bet_history) {
+        $response = [
+            'message' => 'data found',
+            'success' => true,
+            'result_count' => $total_count,
+            'data' => $bet_history
+        ];
+
+        return response()->json($response);
+    } else {
+        return response()->json(['message' => 'No record found', 'success' => false, 'data' => []], 200);
+    }
+}
+
 	
 	
 	public function blue36_last13_result()

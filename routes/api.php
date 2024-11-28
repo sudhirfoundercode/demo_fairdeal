@@ -20,6 +20,7 @@ Route::controller(PublicApiController::class)->group(function () {
 
 
 /// blue 36 Route ////
+
 Route::controller(Blue36Controller::class)->group(function () {
 Route::get('/blue_36_results','blue36_result_store');
 Route::any('/blue_36_bet', 'blue36_bet');
@@ -30,9 +31,10 @@ Route::get('/blue_36_win_amount','blue36_win_amount');
 
 Route::get('/blue36-betlogs', 'getLatestBetLogs');
 Route::get('/blue36-betlogs-amount', 'getLatestBetLogsAmount');
-Route::post('/admin_prediction3', 'admin_prediction3')->name('admin_prediction3');
+Route::post('/admin_prediction3', 'admin_prediction3')->name('blue_admin_prediction3');
 });
 
+// Green36 game route///
 
 Route::controller(Green36Controller::class)->group(function () {
 Route::get('/green_36_results','green36_result_store');
@@ -44,7 +46,7 @@ Route::get('/green_36_win_amount','green36_win_amount');
 
 Route::get('/green36-betlogs', 'getLatestBetLogs');
 Route::get('/green36-betlogs-amount', 'getLatestBetLogsAmount');
-Route::post('/admin_prediction3', 'admin_prediction3')->name('admin_prediction3');
+Route::post('/admin_prediction3', 'admin_prediction3')->name('green_admin_prediction3');
 });
 
 
