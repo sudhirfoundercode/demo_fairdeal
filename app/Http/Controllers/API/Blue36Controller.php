@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 class Blue36Controller extends Controller
 {	
     
-     public function auto_result_insert(Request $request){
+     public function auto_result_insert_blue(Request $request){
          $games_no=DB::select("SELECT `games_no` FROM `blue_36_bet_logs` ORDER BY `games_no` ASC LIMIT 1");
          $game_sr_num=$games_no[0]->games_no;
            $number = $request->number;
@@ -404,7 +404,7 @@ $formattedTime = $kolkataTime->toDateTimeString();
         }
     }
 	
-	public function getLatestBetLogsAmount()
+	public function getLatestBetLogsAmount_blue()
 {
     // Fetch all relevant data from lucky12_betlogs for numbers 1 to 12
     $betLogs = DB::table('blue_36_bet_logs')
@@ -415,7 +415,7 @@ $formattedTime = $kolkataTime->toDateTimeString();
     return response()->json($betLogs);
 }
 
- public function getLatestBetLogs()
+ public function getLatestBetLogs_blue()
 {
     // Fetch the latest data from the lucky12_betlogs table
     $latestBetLogs = DB::table('blue_36_bet_logs')

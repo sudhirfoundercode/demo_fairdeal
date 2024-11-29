@@ -21,7 +21,7 @@
                         <span class="logo-text">
                              <!-- dark Logo text -->
                              {{-- <img src="assets/images/logo-text.png" alt="homepage" class="light-logo" /> --}}
-                             <h4 style="">NPL Admin</h4>
+                             <h4 style="">Fairdeal Admin</h4>
                         </span>
                         <!-- Logo icon -->
                         <!-- <b class="logo-icon"> -->

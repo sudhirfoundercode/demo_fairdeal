@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\DB;
 class Green36Controller extends Controller
 {	
     
-     public function auto_result_insert(Request $request){
+     public function auto_result_insert_green(Request $request){
          $games_no=DB::select("SELECT `games_no` FROM `green_36_bet_logs` ORDER BY `games_no` ASC LIMIT 1");
          $game_sr_num=$games_no[0]->games_no;
            $number = $request->number;

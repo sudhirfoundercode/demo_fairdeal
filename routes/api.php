@@ -2,14 +2,14 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\API\{PublicApiController,Blue36Controller,Green36Controller};
+use App\Http\Controllers\API\{PublicApiController,Blue36Controller,Green36Controller,FuntargetController};
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::post('/auto_result_insert', [blue36Controller::class, 'auto_result_insert'])->name('auto_result_insert');
-Route::post('/auto_result_insert', [Green36Controller::class, 'green_auto_result_insert'])->name('green_auto_result_insert');
+Route::post('/auto_result_insert_blue', [blue36Controller::class, 'auto_result_insert_blue'])->name('auto_result_insert_blue');
+Route::post('/auto_result_insert_green', [Green36Controller::class, 'auto_result_insert_green'])->name('green_auto_result_insert_green');
 
 
 Route::controller(PublicApiController::class)->group(function () {
@@ -17,6 +17,14 @@ Route::controller(PublicApiController::class)->group(function () {
     Route::get('/profile/{id}', 'Profile');
 });
 
+///// Fun Target Route /////
+
+Route::get('/fun_result',[FuntargetController::class,'fun_result']);
+Route::post('/fun_target_bet',[FuntargetController::class, 'fun_target_bet']);
+Route::get('/fun_bet_history',[FuntargetController::class, 'fun_bet_history']);
+Route::get('/fun_last_result',[FuntargetController::class,'fun_last10_result']);
+Route::get('/fun_win_amount',[FuntargetController::class,'fun_win_amount']);
+//Route::get('/fun_result_index',[FuntargetController::class,'fun_result_index']);
 
 
 /// blue 36 Route ////
@@ -29,8 +37,8 @@ Route::get('/blue_36_result','blue36_result_index');
 Route::get('/blue_36_bet_history','blue36_bet_history');
 Route::get('/blue_36_win_amount','blue36_win_amount');
 
-Route::get('/blue36-betlogs', 'getLatestBetLogs');
-Route::get('/blue36-betlogs-amount', 'getLatestBetLogsAmount');
+Route::get('/blue36-betlogs', 'getLatestBetLogs_blue');
+Route::get('/blue36-betlogs-amount', 'getLatestBetLogsAmount_blue');
 Route::post('/admin_prediction3', 'admin_prediction3')->name('blue_admin_prediction3');
 });
 
