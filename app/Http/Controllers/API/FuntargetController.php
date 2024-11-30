@@ -266,8 +266,9 @@ public function demo_result()
             $formattedTime = $kolkataTime->toDateTimeString();
 			
 			$gamesno=DB::table('fun_bet_logs')->value('games_no');
-			
-			$admin_result=null;
+			$admin_result = DB::table('fun_admin_result')->where('games_no',$gamesno)->orderBy('id','desc')->value('number');
+		
+			//$admin_result=null;
 			$given_amount=1000000;
 			$result=DB::select("SELECT 
     SUM(`amount`) AS total_amount,
@@ -339,5 +340,71 @@ FROM `fun_bet_logs`");
       
 }
 	
+	
+	
+	
+	public function getLatestBetLogsAmount()
+{
+    // Fetch all relevant data from lucky12_betlogs for numbers 1 to 12
+    $betLogs = DB::table('fun_bet_logs')
+                 ->select('number', 'amount')
+                 ->whereIn('number', range(1, 12)) // Fetch for numbers 1 to 12
+                 ->get();
+
+    return response()->json($betLogs);
+}
+
+
+ public function getLatestBetLogs()
+{
+    // Fetch the latest data from the lucky12_betlogs table
+    $latestBetLogs = DB::table('fun_bet_logs')
+                        ->select('games_no')
+                        ->orderBy('updated_at', 'desc')
+                        ->first(); // first() fetches the latest record
+
+    return response()->json($latestBetLogs);
+}
+
+public function auto_spin_ad_result_insert(Request $request){
+        $period_number = $request->period_num;
+        $card_number = $request->card_number;
+        $up = DB::table('fun_admin_result')->insert(['games_no'=>$period_number,'number'=>$card_number]);
+        if($up){
+            return response()->json(['status'=>200,'message'=>'prediction stored successfully.']);
+        }else{
+             return response()->json(['status'=>400,'message'=>'something went wrong!']);
+        }
+    }
+
+
+public function admin_prediction4(Request $request){
+        
+        $request->validate([
+            'games_no' => 'required|unique:admin_results|max:10',
+            'number' => 'required',
+        ]);
+        
+          $custom_date_time= $request->custom_result_date_time;
+          if($custom_date_time){
+              $custom_date_time = date('Y-m-d H:i:s', strtotime($custom_date_time));
+          }
+       // dd($custom_date_time);
+          $result_time = $request->result_time;
+          $number = $request->number;
+          $game_no = $request->period_no;
+          $prediction_insert = DB::table('admin_results')->insert(['card_number'=>$number,'result_time'=>$result_time ?? now(),
+          'game_no' => $game_no
+          ]);
+          
+          if($prediction_insert){
+              return redirect()->back()->with('success','Result Inserted Successfully');
+          }else{
+              return redirect()->back()->with('error','Result Inserted Successfully');
+          }
+          
+    }
+
+
 	
 }

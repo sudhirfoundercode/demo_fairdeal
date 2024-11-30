@@ -25,7 +25,13 @@ Route::get('/fun_bet_history',[FuntargetController::class, 'fun_bet_history']);
 Route::get('/fun_last_result',[FuntargetController::class,'fun_last10_result']);
 Route::get('/fun_win_amount',[FuntargetController::class,'fun_win_amount']);
 //Route::get('/fun_result_index',[FuntargetController::class,'fun_result_index']);
-
+Route::controller(FuntargetController::class)->group(function () {
+ Route::post('/auto_spin_ad_result_insert', 'auto_spin_ad_result_insert');
+    Route::get('/spin-betlogs', 'getLatestBetLogs');
+    Route::get('/spin-betlogs-amount', 'getLatestBetLogsAmount');
+    Route::post('/admin_prediction4', 'admin_prediction4')->name('admin_prediction4');
+    
+});
 
 /// blue 36 Route ////
 
