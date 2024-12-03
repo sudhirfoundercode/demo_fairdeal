@@ -232,13 +232,15 @@ public function demo_result()
 
     $userid = $request->user_id;
  
-		  $bet_amount=DB::select("SELECT g.games_no AS games_no, g.number AS number, COALESCE(b.amount, 0) AS amount, SUM(COALESCE(b.win_amount, 0)) OVER (PARTITION BY g.games_no) AS total_win_amount, CASE WHEN COALESCE(b.amount, 0) = 0 THEN 1 WHEN COALESCE(b.amount, 0) > 0 AND COALESCE(b.win_amount, 0) = 0 THEN 2 WHEN COALESCE(b.amount, 0) > 0 AND COALESCE(b.win_amount, 0) > 0 THEN 3 END AS status FROM fun_results g LEFT JOIN fun_bets b ON g.games_no = b.games_no AND b.user_id = 1 ORDER BY g.games_no DESC LIMIT 1;
+		  //$bet_amount=DB::select("SELECT g.games_no AS games_no, g.number AS number, COALESCE(b.amount, 0) AS amount, SUM(COALESCE(b.win_amount, 0)) OVER (PARTITION BY g.games_no) AS total_win_amount, CASE WHEN COALESCE(b.amount, 0) = 0 THEN 1 WHEN COALESCE(b.amount, 0) > 0 AND COALESCE(b.win_amount, 0) = 0 THEN 2 WHEN COALESCE(b.amount, 0) > 0 AND COALESCE(b.win_amount, 0) > 0 THEN 3 END AS status FROM fun_results g LEFT JOIN fun_bets b ON g.games_no = b.games_no AND b.user_id = $userid ORDER BY g.games_no DESC LIMIT 1;");
+		  $bet_amount=DB::select("SELECT g.games_no AS games_no, g.number AS number, COALESCE(SUM(b.amount), 0) AS amount, COALESCE(SUM(b.win_amount), 0) AS total_win_amount FROM fun_results g LEFT JOIN fun_bets b ON g.games_no = b.games_no AND b.user_id = $userid GROUP BY g.games_no, g.number ORDER BY g.games_no DESC LIMIT 1;
 ");
+//dd($bet_amount);
 	
 		$total_win_amount=$bet_amount[0]->total_win_amount;
 		//$amount=$bet_amount[0]->amount;
 			$win_number=$bet_amount[0]->number;
-			$status=$bet_amount[0]->status;
+			//$status=$bet_amount[0]->status;
 		    //dd($win_number);
         if ($bet_amount) {
             $response = [
@@ -246,7 +248,7 @@ public function demo_result()
                 'status' => 200,
                 'win_amount' => $total_win_amount,
 				'win_number' => $win_number,
-				'game_status'=>$status
+				'game_status'=>1
             ];
 
             return response()->json($response);
@@ -324,7 +326,7 @@ FROM `fun_bet_logs`");
 				$total_multy_amt=$amounts*$multiplier;
 				
            if($game_ids == $game_idd){
-		   DB::table('users')->where('id',$userid)->update(['wallet'=>DB::raw("wallet+$total_multy_amt")]);
+		   //DB::table('users')->where('id',$userid)->update(['wallet'=>DB::raw("wallet+$total_multy_amt")]);
 			   DB::table('fun_bets')->where('id',$bet_ids)->update(['win_amount'=>$total_multy_amt,'status'=>1,'win_number'=>$number]);
 		   }else{
 		    DB::table('fun_bets')->where('id',$bet_ids)->update(['status'=>2,'win_number'=>$number]);
@@ -339,6 +341,43 @@ FROM `fun_bet_logs`");
 		 //$this->amount_distributation($gamesno);
       
 }
+
+
+    public function takeAmount(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+        'user_id' => 'required|numeric',
+        'amount' => 'required'
+    ]);
+
+    $validator->stopOnFirstFailure();
+
+    if ($validator->fails()) {
+        $response = [
+            'status' => 400,
+            'message' => $validator->errors()->first()
+        ];
+        return response()->json($response, 200);
+    }
+
+    $userid = $request->user_id;
+    $amount = $request->amount;
+    
+        $add_amount=DB::table('users')->where('id',$userid)->update(['wallet'=>DB::raw("wallet+$amount")]);
+        
+        if ($add_amount) {
+            $response = [
+                'message' => 'Amount Added Successfully',
+                'status' => 200,
+                'amount' => $amount,
+            ];
+
+            return response()->json($response);
+        } else {
+            return response()->json(['message' => 'Amount Not Added, Something Went Wrong', 'status' => 400]);
+        }
+        
+    }
 	
 	
 	

@@ -24,6 +24,7 @@ Route::post('/fun_target_bet',[FuntargetController::class, 'fun_target_bet']);
 Route::get('/fun_bet_history',[FuntargetController::class, 'fun_bet_history']);
 Route::get('/fun_last_result',[FuntargetController::class,'fun_last10_result']);
 Route::get('/fun_win_amount',[FuntargetController::class,'fun_win_amount']);
+Route::post('/takeamount',[FuntargetController::class,'takeAmount']);
 //Route::get('/fun_result_index',[FuntargetController::class,'fun_result_index']);
 Route::controller(FuntargetController::class)->group(function () {
  Route::post('/auto_spin_ad_result_insert', 'auto_spin_ad_result_insert');

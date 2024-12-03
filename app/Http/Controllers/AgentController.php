@@ -13,7 +13,7 @@ class AgentController extends Controller
     }
 
     public function agentStore(Request $request){
-
+//dd($request);
         $validated=$request->validate([
             'email'=>'required',
             'password'=>'required',
@@ -23,6 +23,11 @@ class AgentController extends Controller
             'email'=>$request->email,
             'password'=>$request->password,
             'name'=>$request->name,
+            'type'=>$request->type,
+            'revenue'=>$request->revenue,
+            'role_id'=>4,
+            
+            
         );
 
         $users = User::create($store);

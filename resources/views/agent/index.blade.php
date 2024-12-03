@@ -8,7 +8,7 @@
                 style="position:absolute; top:30px; right:50px;">
                 Create
             </button>
-            <form action="{{ route('agentStore') }}">
+            <form action="{{ route('agentStore') }}" method="post">
                 <!-- Modal -->
                 @csrf
                 <div class="modal fade" id="exampleModalCenter" role="dialog" aria-labelledby="exampleModalCenterTitle"
@@ -28,7 +28,7 @@
                                             </div>
                                             <div class="col-sm-6">
                                                 <label for="">Password<small>*</small></label>
-                                                <input type="number" class="form-control">
+                                                <input type="number" name="password" class="form-control">
                                             </div>
                                         </div>
                                     </div>
@@ -50,11 +50,11 @@
                                     <div class="row mb-3">
                                         <div class="col-sm-6">
                                             <label>Type<small>*</small></label>
-                                            <input type="text" class="form-control">
+                                            <input type="text" name="type" class="form-control">
                                         </div>
                                         <div class="col-sm-6">
                                             <label for="">Revenue Percent<small>*</small></label>
-                                            <input type="number" class="form-control" placeholder="0">
+                                            <input type="number" class="form-control" name="revenue" placeholder="0">
                                         </div>
                                     </div>
 
@@ -94,10 +94,10 @@
                                 <td>{{ $item->email }}</td>
                                 <td>{{ $item->password }}</td>
                                 <td>{{ $item->name }}</td>
-                                <td></td>
-                                <td></td>
+                                <td>{{ $item->type }}</td>
+                                <td>{{ $item->wallet }}</td>
                                 <td>{{ $item->parent_id }}</td>
-                                <td></td>
+                                <td>{{ $item->revenue }}</td>
                                 <td></td>
                             </tr>
                         @endforeach

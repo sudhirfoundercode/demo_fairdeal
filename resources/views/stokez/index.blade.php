@@ -98,10 +98,10 @@
                                 <td>{{ $item->email }}</td>
                                 <td>{{ $item->password }}</td>
                                 <td>{{ $item->name }}</td>
-                                <td></td>
-                                <td></td>
+                                <td>{{ $item->type }}</td>
+                                <td>{{ $item->wallet }}</td>
                                 <td>{{ $item->parent_id }}</td>
-                                <td></td>
+                                <td>{{ $item->revenue }}</td>
                                 <td></td>
                             </tr>
                         @endforeach

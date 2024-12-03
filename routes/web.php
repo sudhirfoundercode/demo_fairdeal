@@ -57,6 +57,8 @@ Route::controller(DashboardController::class)->group(function () {
 Route::controller(SuperStokezController::class)->group(function () {
     Route::get('/super-stokez-index', 'super_stokez_index')->name('super.stokez.index');
     Route::post('/SuperStokezStore','SuperStokezStore')->name('SuperStokezStore');
+     Route::post('/SuperStokez-update-{id}','SuperStokez_update')->name('SuperStokez.update');
+    
 });
 
 // Stokez controller
