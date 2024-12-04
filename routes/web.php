@@ -58,6 +58,9 @@ Route::controller(SuperStokezController::class)->group(function () {
     Route::get('/super-stokez-index', 'super_stokez_index')->name('super.stokez.index');
     Route::post('/SuperStokezStore','SuperStokezStore')->name('SuperStokezStore');
      Route::post('/SuperStokez-update-{id}','SuperStokez_update')->name('SuperStokez.update');
+    // Route::post('/SuperStokez-BlockUnblock-{id}','SuperStokez_BlockUnblock')->name('SuperStokez.BlockUnblock');
+    Route::get('/SuperStokez/{id}/block-unblock','SuperStokez_BlockUnblock')
+    ->name('SuperStokez.BlockUnblock');
     
 });
 
@@ -86,6 +89,9 @@ Route::controller(AgentController::class)->group(function () {
 // Transfer Controller
 Route::controller(TransferController::class)->group(function () {
     Route::get('/transfer-index', 'transfer_index')->name('transfer.index');
+    Route::get('/user-balance/{username}', 'getBalance');
+    Route::post('/transfer-amount', 'Player_transfer_amount')->name('transfer.amount');
+    Route::post('/agent-transfer-amount', 'Agent_transfer_amount')->name('Agent.amount');
 });
 
 // AdjustPoint Controller

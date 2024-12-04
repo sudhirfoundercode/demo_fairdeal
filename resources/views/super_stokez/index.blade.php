@@ -99,7 +99,7 @@
                 @foreach ($users as $key => $item)
                     <tr>
                         <td>{{ $key + 1 }}</td>
-                        <td>{{ $item->email }}</td>
+                        <td>{{ $item->username }}</td>
                         <td>{{ $item->password }}</td>
                         <td>{{ $item->name }}</td>
                         <td>{{ $item->type }}</td>
@@ -108,10 +108,22 @@
                         <td>{{ $item->revenue }}</td>
                         <td>
                             <!--<i  class="fa-duotone fa-regular fa-pen-to-square h3"></i>-->
-                            <i class="fa fa-edit mt-1" data-toggle="modal" data-target="#exampleModalCenterupdate1{{$item->id}}" style="font-size:30px"></i>
-                            <i class="fa-duotone fa-solid fa-circle-up h3" data-toggle="modal" data-target="#exampleModalCenter{{$item->id}}"></i>
-                            <i class="fa-duotone fa-solid fa-circle-down h3" data-toggle="modal" data-target="#subtractWalletModal{{$item->id}}"></i>
-                            <i class="fa-duotone fa-solid fa-unlock h3" style="--fa-primary-color: #14eb3f; --fa-secondary-color: #14eb3f;"></i>
+                            <i class="fa fa-edit h3" data-toggle="modal" style="color:blue" data-target="#exampleModalCenterupdate1{{$item->id}}" style="font-size:30px"></i>
+                            <i class="fa-duotone fa-solid fa-circle-up h3" style="color:green" data-toggle="modal" data-target="#exampleModalCenter{{$item->id}}"></i>
+                            <i class="fa-duotone fa-solid fa-circle-down h3" style="color:red" data-toggle="modal" data-target="#subtractWalletModal{{$item->id}}"></i>
+                            <!--<i class="fa-duotone fa-solid fa-unlock h3" style="color:green;"></i>-->
+                             <!-- Block/Unblock Icon -->
+        @if ($item->status == 0)
+            <i class="fa-duotone fa-solid fa-lock h3" style="color:red;"></i>
+            <span>Blocked</span>
+            <!-- Link to Unblock -->
+            <a href="{{ route('SuperStokez.BlockUnblock', $item->id) }}" class="btn btn-success btn-sm">Unblock</a>
+        @else
+            <i class="fa-duotone fa-solid fa-unlock h3" style="color:green;"></i>
+            <span>Unblocked</span>
+            <!-- Link to Block -->
+            <a href="{{ route('SuperStokez.BlockUnblock', $item->id) }}" class="btn btn-danger btn-sm">Block</a>
+        @endif
                         </td>
                         <!--edit super stokez-->
                         <div class="modal fade" id="exampleModalCenterupdate1{{$item->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -168,9 +180,11 @@
                               <button type="submit" class="btn btn-primary">Submit</button>
                             </div>
                             </form>
-                        </div>
+                         </div>
                       </div>
-                      
+                      </div>
+                        </div>
+                        </div>
                       <!--end edit super stokez-->
                       
                       <!--add wallet-->

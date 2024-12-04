@@ -112,5 +112,27 @@ public function wallet_subtract(Request $request, $id)
     }
 }
 
+public function SuperStokez_BlockUnblock(Request $request, $id)
+{
+    // Get the current status of the user from the database
+    $user = DB::table('users')->where('id', $id)->first();
+
+    if ($user) {
+        // Toggle the status based on the current status
+        $newStatus = ($user->status == 1) ? 0 : 1;
+
+        // Update the status in the database
+        DB::table('users')->where('id', $id)->update(['status' => $newStatus]);
+
+        // Return a success message with the appropriate action
+        $message = ($newStatus == 0) ? 'Player is Blocked!' : 'Player is Unblocked!';
+        return redirect()->back()->with('success', $message);
+    } else {
+        // Return an error message if the user is not found
+        return redirect()->back()->with('error', 'Player not found!');
+    }
+}
+
+
 
 }

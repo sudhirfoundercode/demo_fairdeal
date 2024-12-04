@@ -275,7 +275,10 @@ $query .= " ORDER BY `blue_36_bets`.`games_no` DESC LIMIT $offset, $limit";
 	{
 	
 		
- 	$last_result=DB::select("SELECT * FROM blue_36_results ORDER BY id DESC limit 13");
+ //	$last_result=DB::select("SELECT * FROM blue_36_results ORDER BY id DESC limit 13");
+ $last_result = DB::select("SELECT * FROM blue_36_results ORDER BY id DESC LIMIT 10");
+$last_result = array_reverse($last_result);  // Reverse the array in PHP to place the most recent result last
+
 //$last_result = DB::select("SELECT * FROM blue_36_results ORDER BY id DESC LIMIT 12 OFFSET 1");
 
 		

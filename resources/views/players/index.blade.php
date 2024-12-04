@@ -80,7 +80,7 @@
                                 <th><b>Password</b></th>
                                 <!--add-->
                                 <th><b>Mobile</b></th>
-                                <th><b>Email</b></th>
+                                <!--<th><b>Email</b></th>-->
                                 <!--end add-->
                                 <!--<th><b>Game</b></th>-->
                                 <th><b>Parent</b></th>
@@ -105,21 +105,102 @@
                                     <td>{{ $item->password }}</td>
                                     <!--add-->
                                     <td>{{ $item->mobile }}</td>
-                                    <td>{{ $item->email }}</td>
+                                    <!--<td></td>-->
                                     <!--end add-->
                                     <!--<td></td>-->
                                     <td>{{ $item->parent_id }}</td>
-                                    <td>{{$item->wallet}}
-						<div style="display: flex; gap: 10px;">
-                          <div class="btn btn-info btn-sm" style="border-radius: 10px;">
-                            <i class="fa fa-plus" data-toggle="modal" data-target="#exampleModalCenter{{$item->id}}" style="font-size:15px"></i>
+                                    <td>{{$item->wallet}}</td>
+					             <!--add-->
+                                    <td>{{ $item->revenue }}</td>
+                                    <!--end add-->
+                                    <!--<td></td>-->
+                                    <!--<td></td>-->
+                                    <!--<td></td>-->
+                                    <!--<td></td>-->
+                                    <!--<td></td>-->
+                                     <td>
+                            <!--<i  class="fa-duotone fa-regular fa-pen-to-square h3"></i>-->
+                            <i class="fa fa-edit h3" data-toggle="modal" style="color:blue" data-target="#exampleModalCenterupdate1{{$item->id}}" style="font-size:30px"></i>
+                            <i class="fa-duotone fa-solid fa-circle-up h3" style="color:green" data-toggle="modal" data-target="#exampleModalCenter{{$item->id}}"></i>
+                            <i class="fa-duotone fa-solid fa-circle-down h3" style="color:red" data-toggle="modal" data-target="#subtractWalletModal{{$item->id}}"></i>
+                            <!--<i class="fa-duotone fa-solid fa-unlock h3" style="color:green;"></i>-->
+                             <!-- Block/Unblock Icon -->
+        @if ($item->status == 0)
+            <i class="fa-duotone fa-solid fa-lock h3" style="color:red;"></i>
+            <span>Blocked</span>
+            <!-- Link to Unblock -->
+            <a href="{{ route('SuperStokez.BlockUnblock', $item->id) }}" class="btn btn-success btn-sm">Unblock</a>
+        @else
+            <i class="fa-duotone fa-solid fa-unlock h3" style="color:green;"></i>
+            <span>Unblocked</span>
+            <!-- Link to Block -->
+            <a href="{{ route('SuperStokez.BlockUnblock', $item->id) }}" class="btn btn-danger btn-sm">Block</a>
+        @endif
+                        </td>
+                        <!--edit super stokez-->
+                        <div class="modal fade" id="exampleModalCenterupdate1{{$item->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="exampleModalLongTitle">Edit Super Stokez</h5>
+                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <form action="{{route('SuperStokez.update',$item->id)}}" method="post" enctype="multipart/form-data">
+                              @csrf
+                            <div class="modal-body">
+                              <div class="container-fluid">
+                                <div class="row">
+                                  <div class="form-group col-md-6">
+                                    <label for="accumulated_amount">Name</label>
+                                    <input type="text" class="form-control" id="accumulated_amount" name="name" value="{{$item->name}}" placeholder="Enter name">
+                                    @error('name')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
+                                  </div>
+                                  
+                                  <div class="form-group col-md-6">
+                                    <label for="amount">Email</label>
+                                    <input type="text" class="form-control" id="amount" name="email" value="{{$item->email}}" placeholder="Enter name">
+                                    @error('email')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
+                                  </div>
+                            
                           </div>
-                          <div class="btn btn-danger btn-sm" style="border-radius: 10px;">
-                            <i class="fa fa-minus" data-toggle="modal" data-target="#subtractWalletModal{{$item->id}}" style="font-size:15px"></i>
+                          <div class="row">
+                                  <div class="form-group col-md-6">
+                                    <label for="accumulated_amount">password</label>
+                                    <input type="text" class="form-control" id="accumulated_amount" name="password" value="{{$item->password}}" placeholder="Enter name">
+                                    @error('password')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
+                                  </div>
+                                  
+                                  <div class="form-group col-md-6">
+                                    <label for="amount">Revenue</label>
+                                    <input type="text" class="form-control" id="amount" name="revenue" value="{{$item->revenue}}" placeholder="Enter name">
+                                    @error('revenue')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                    @enderror
+                                  </div>
+                            
                           </div>
+                           <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                            </form>
+                         </div>
+                      </div>
+                      </div>
                         </div>
-
-						   <div class="modal fade" id="exampleModalCenter{{$item->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                        </div>
+                      <!--end edit super stokez-->
+                      
+                      <!--add wallet-->
+                      <div class="modal fade" id="exampleModalCenter{{$item->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -192,16 +273,7 @@
   </div>
 </div>
 
-					   </td>
-					             <!--add-->
-                                    <td>{{ $item->revenue }}</td>
-                                    <!--end add-->
-                                    <!--<td></td>-->
-                                    <!--<td></td>-->
-                                    <!--<td></td>-->
-                                    <!--<td></td>-->
-                                    <!--<td></td>-->
-                                    <td></td>
+<!--end substract wallet-->
                                 </tr>
                             @endforeach
                         </tbody>
