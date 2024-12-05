@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Str;
+
 
 class AgentController extends Controller
 {
@@ -26,6 +28,7 @@ class AgentController extends Controller
             'type'=>$request->type,
             'revenue'=>$request->revenue,
             'role_id'=>4,
+             'username' => Str::upper(Str::random(5)),
             
             
         );

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use DB;
+use Illuminate\Support\Str;
 class SuperStokezController extends Controller
 {
     public function super_stokez_index(){
@@ -29,6 +30,7 @@ class SuperStokezController extends Controller
         'name' => $request->name,
         'revenue' => $request->revenue,
         'role_id' => 2, // Ensure this field is included
+         'username' => Str::upper(Str::random(5)),
     );
     
 

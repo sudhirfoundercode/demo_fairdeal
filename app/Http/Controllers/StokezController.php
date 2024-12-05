@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Str;
 
 class StokezController extends Controller
 {
@@ -25,6 +26,7 @@ class StokezController extends Controller
             'name' => $req->name,
             'revenue' => $req->revenue,
             'role_id' => 3, // Ensure this field is included
+             'username' => Str::upper(Str::random(5)),
         );
 
         $users = User::create($data);

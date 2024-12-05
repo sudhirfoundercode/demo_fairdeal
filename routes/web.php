@@ -117,8 +117,13 @@ Route::controller(TurnOverReportController::class)->group(function () {
 
 // Player History Controller
 Route::controller(PlayerHistoryController::class)->group(function () {
-    Route::get('/playerHistory-index', 'playerHistory_index')->name('playerHistory.index');
+    // Route::get('/playerHistory-index', 'playerHistory_index')->name('playerHistory.index');
+    Route::get('/playerHistory-index','playerHistory_index')->name('playerHistory.index');
+
 });
+
+
+
 
 // Transaction Report Controller
 Route::controller(TransactionReportController::class)->group(function () {
