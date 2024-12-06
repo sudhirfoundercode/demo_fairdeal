@@ -245,7 +245,7 @@ if (!empty($where)) {
 $query .= " GROUP BY `blue_36_bets`.`games_no`";
 
 // Order and apply LIMIT and OFFSET
-$query .= " ORDER BY `blue_36_bets`.`games_no` DESC LIMIT $offset, $limit";
+$query .= " ORDER BY `blue_36_bets`.`id` DESC LIMIT $offset, $limit";
 
     // Execute the query
     $bet_history = DB::select($query);

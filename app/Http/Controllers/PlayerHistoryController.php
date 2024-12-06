@@ -9,6 +9,92 @@ use Illuminate\Support\Str;
 
 class PlayerHistoryController extends Controller
 {
+    
+    public function playerHistory_index(Request $request){
+        
+         $distributor = User::select('id', 'name')->where('role_id', 4)->get();
+        
+         
+        
+       if($request->isMethod('POST')){
+           $distributor_id = $request->distributor_id;
+           $game_id = $request->id;
+           $from_date = $request->from_date;
+           $to_date = $request->to_date;
+           
+           
+           $table_name = $game_id==1?'green_36_bets':($game_id==2?'blue_36_bets':'fun_bets');
+           $query = DB::table('users')
+                    ->leftJoin($table_name, "users.id", '=', "$table_name.user_id")
+                     ->selectRaw("
+                                users.name as name,
+                                $table_name.description as description,
+                                COALESCE(SUM($table_name.amount),0)AS total_bet,
+                                COALESCE(SUM(CASE WHEN $table_name.status = 1 THEN $table_name.amount ELSE 0 END), 0) AS total_win,
+                                COALESCE(SUM(CASE WHEN $table_name.status = 2 THEN $table_name.amount ELSE 0 END), 0) AS total_loss
+                            ")
+                            ->where('users.parent_id',$distributor_id);
+            if($from_date){
+                $query->whereDate("$table_name.created_at",'>=',$from_date);
+            }   
+            if($to_date){
+                $query->whereDate("$table_name.created_at",'<=',$to_date);
+            }
+            
+           $blue_36_bets =  $query->groupBy("$table_name.user_id", 'users.name', "$table_name.description")->get();
+           
+           return view('playerHistory.index')->with('blue_36_bets',$blue_36_bets)->with('distributor',$distributor);
+           
+           
+       }else{
+        
+        $blue_36_bets = DB::table('blue_36_bets')
+                            ->leftJoin('users', 'blue_36_bets.user_id', '=', 'users.id')
+                            ->selectRaw("
+                                users.name as name,
+                                blue_36_bets.description as description,
+                                COALESCE(SUM(blue_36_bets.amount),0)AS total_bet,
+                                COALESCE(SUM(CASE WHEN blue_36_bets.status = 1 THEN blue_36_bets.amount ELSE 0 END), 0) AS total_win,
+                                COALESCE(SUM(CASE WHEN blue_36_bets.status = 2 THEN blue_36_bets.amount ELSE 0 END), 0) AS total_loss
+                            ")
+                            ->groupBy('blue_36_bets.user_id', 'users.name', 'blue_36_bets.description')
+                            ->get();
+        $green_36_bets = DB::table('green_36_bets')
+                            ->leftJoin('users', 'green_36_bets.user_id', '=', 'users.id')
+                            ->selectRaw("
+                                users.name as name,
+                                green_36_bets.description as description,
+                                COALESCE(SUM(green_36_bets.amount),0)AS total_bet,
+                                COALESCE(SUM(CASE WHEN green_36_bets.status = 1 THEN green_36_bets.amount ELSE 0 END), 0) AS total_win,
+                                COALESCE(SUM(CASE WHEN green_36_bets.status = 2 THEN green_36_bets.amount ELSE 0 END), 0) AS total_loss
+                            ")
+                            ->groupBy('green_36_bets.user_id', 'users.name', 'green_36_bets.description')
+                            ->get();
+                            
+     $fun_bets = DB::table('fun_bets')
+                            ->leftJoin('users', 'fun_bets.user_id', '=', 'users.id')
+                            ->selectRaw("
+                                users.name as name,
+                                fun_bets.description as description,
+                                COALESCE(SUM(fun_bets.amount),0)AS total_bet,
+                                COALESCE(SUM(CASE WHEN fun_bets.status = 1 THEN fun_bets.amount ELSE 0 END), 0) AS total_win,
+                                COALESCE(SUM(CASE WHEN fun_bets.status = 2 THEN fun_bets.amount ELSE 0 END), 0) AS total_loss
+                            ")
+                            ->groupBy('fun_bets.user_id', 'users.name', 'fun_bets.description')
+                            ->get();
+                            
+                            
+
+        return view('playerHistory.index')->with('blue_36_bets',$blue_36_bets)->with('green_36_bets',$green_36_bets)->with('fun_bets',$fun_bets)->with('distributor',$distributor);
+        
+       }
+    }
+    
+    
+    
+    
+    
+    
     // public function playerHistory_index(){
     //   $gamename = [
     //                   "Green36 Game",
@@ -67,7 +153,7 @@ class PlayerHistoryController extends Controller
 //     return view('playerHistory.index', compact('gamename', 'distributor', 'playerHistories'));
 // }
 
-  public function playerHistory_index(Request $request)
+  public function playerHistory_index_old(Request $request)
     {
         // Game names and corresponding tables
         $gamename = [
@@ -109,7 +195,7 @@ class PlayerHistoryController extends Controller
 
     private function fetchDataFromTable($table, $request)
     {
-        dd($table);
+       // dd($table);
         $query = DB::table($table)
             ->join('users', "{$table}.user_id", '=', 'users.id')
             ->select(
@@ -120,7 +206,7 @@ class PlayerHistoryController extends Controller
                 DB::raw("SUM(CASE WHEN {$table}.status = 2 THEN {$table}.amount ELSE 0 END) as total_loss")
             )
             ->groupBy('users.id', 'users.name');
-
+//dd($query);
         if ($request->filled('distributor_id')) {
             $query->where('users.id', $request->distributor_id);
         }

@@ -29,7 +29,7 @@ use App\Http\Controllers\AndarBaharController;
 use App\Http\Controllers\TripleChanceController;
 use App\Http\Controllers\Blue36Controller;
 use App\Http\Controllers\Green36Controller;
-use App\Http\Controllers\JackpotController;
+use App\Http\Controllers\{JackpotController,WinningRatioController};
 
 // Define the route
 Route::post('/bonus-settings/update', [JackpotController::class, 'update']);
@@ -99,6 +99,10 @@ Route::controller(AdjustController::class)->group(function () {
     Route::get('/adjust-index', 'adjust_index')->name('adjust.index');
 });
 
+Route::controller(WinningRatioController::class)->group(function () {
+    Route::get('/winning-ratio', 'winning_ratio')->name('winningRatio.index');
+});
+
 
 // Setting Controller
 Route::controller(SettingController::class)->group(function () {
@@ -117,8 +121,7 @@ Route::controller(TurnOverReportController::class)->group(function () {
 
 // Player History Controller
 Route::controller(PlayerHistoryController::class)->group(function () {
-    // Route::get('/playerHistory-index', 'playerHistory_index')->name('playerHistory.index');
-    Route::get('/playerHistory-index','playerHistory_index')->name('playerHistory.index');
+    Route::any('/playerHistory-index','playerHistory_index')->name('playerHistory.index');
 
 });
 

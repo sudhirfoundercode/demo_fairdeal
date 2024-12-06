@@ -42,6 +42,8 @@ if($role == '1'){
              
              $n =  '<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="'.route('idPasswordChange.index').'" aria-expanded="false"><i class="m-r-10 mdi mdi-rotate-3d"></i><span class="hide-menu">ID/Password Change</span></a></li>';
             
+            $o =  '<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="'.route('winningRatio.index').'" aria-expanded="false"><i class="m-r-10 mdi mdi-rotate-3d"></i><span class="hide-menu">Winning Ratio Settings</span></a></li>';
+            
              $p =  '<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="'.route('assignRole.index').'" aria-expanded="false"><i class="m-r-10 mdi mdi-recycle"></i><span class="hide-menu">Assign Role</span></a></li>';
              
              
@@ -94,6 +96,7 @@ if($role == '1'){
                 {!! in_array(16, $permissionsData[$rolename]) ? $l : '' !!}
                 
                 {!! in_array(18, $permissionsData[$rolename]) ? $n : '' !!}
+                {!! in_array(19, $permissionsData[$rolename]) ? $o : '' !!}
                
                 {!! in_array(20, $permissionsData[$rolename]) ? $p : '' !!}
                 
